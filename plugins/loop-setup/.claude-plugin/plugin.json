@@ -1,0 +1,7 @@
+{
+  "name": "loop-setup",
+  "version": "1.0.0",
+  "description": "Ralph Loop scaffolding - specs, PIN, implementation plans for bash loop workflow",
+  "author": { "name": "steez" },
+  "license": "MIT"
+}

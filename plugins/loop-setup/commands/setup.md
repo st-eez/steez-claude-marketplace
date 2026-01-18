@@ -193,7 +193,9 @@ Ask the user using AskUserQuestion tool:
 
 ## PATH A: New Feature (Single Feature)
 
-### A1: Interview About the Feature
+### A1: Interview About the Feature (Ephemeral Analysis)
+
+**NOTE:** This interview and research captures context for YOU to understand the work. The plan is just a checklist—"why" analysis stays in this conversation.
 
 **Geoffrey's Quick Conversation Pattern:**
 - Maximum 5 question-answer exchanges
@@ -270,25 +272,12 @@ Create `specs/[feature-name]-implementation-plan.md`:
 ```markdown
 # [Feature Name] Implementation Plan
 
-## Sources Consulted
-- [Library/framework name]: [specific doc page or Context7 query used]
-- [Another source]: [what was learned]
-
-## Why This Approach
-[Explain why this is the RIGHT way to implement this feature, not just A way. Reference best practices from sources consulted. If there were alternative approaches, explain why this one was chosen.]
-
-## Checklist
 - [ ] `[file path]:[start-end lines]`: [specific change]
 - [ ] `[file path]:[start-end lines]`: [specific change]
 - [ ] `[test file]`: [tests to add]
-
-Example: `- [ ] \`src/api/auth.ts:42-58\`: Add token validation before refresh`
-
-## Notes
-[Any implementation notes from conversation]
 ```
 
-**Do NOT add extra sections** like "Implementation Details" or code snippets. The loop will write the code during implementation. Stick to the template above.
+**Plan format:** Just a title and checklist items. No Sources, Why, or Notes sections—that context lives in this planning conversation, not in the plan the loop executes.
 
 **CHECKPOINT:** Read back the plan file.
 - Success: Output "Created specs/[name]-implementation-plan.md ✓"
@@ -322,7 +311,9 @@ For each bug mentioned, interview briefly:
 
 **Keep asking:** "Any other bugs to fix?" until user says "that's all" or equivalent.
 
-### B2: Explore and Document Root Causes
+### B2: Find Root Causes (Ephemeral Analysis)
+
+**NOTE:** This analysis stays in the conversation—it doesn't go in the plan. The plan is just a checklist.
 
 For each bug, search the codebase to:
 - Identify the root cause
@@ -375,56 +366,18 @@ Create `specs/bug-fixes-implementation-plan.md`:
 ```markdown
 # Bug Fixes Implementation Plan
 
-## Sources Consulted
-- [Library/framework name]: [specific doc page or Context7 query used]
-- [Another source]: [what was learned about proper error handling/patterns]
-
----
-
 ## Bug 1: [Short Name]
-
-### Problem
-[What is broken]
-
-### Reproduction
-[Exact steps to reproduce]
-
-### Root Cause
-[What exploration revealed - the ACTUAL cause, not symptoms]
-
-### Why This Fix (Not a Bandaid)
-[Explain why this fix addresses the root cause. How do we know this isn't just masking the problem? Reference documentation if applicable.]
-
-### Fix
 - [ ] `[file path]:[start-end lines]`: [specific change]
 - [ ] `[test file]`: [regression test]
 
 ---
 
 ## Bug 2: [Short Name]
-
-### Problem
-[What is broken]
-
-### Reproduction
-[Exact steps to reproduce]
-
-### Root Cause
-[What exploration revealed - the ACTUAL cause, not symptoms]
-
-### Why This Fix (Not a Bandaid)
-[Explain why this fix addresses the root cause. How do we know this isn't just masking the problem? Reference documentation if applicable.]
-
-### Fix
 - [ ] `[file path]:[start-end lines]`: [specific change]
 - [ ] `[test file]`: [regression test]
-
----
-
-[Repeat for all bugs]
 ```
 
-**Do NOT add extra sections** like "Implementation Details" or code snippets. The loop will write the code during implementation. Stick to the template above.
+**Plan format:** Just bug section headers and checklist items. Problem/Reproduction/Root Cause/Why analysis happens in this conversation—it doesn't go in the plan.
 
 **CHECKPOINT:** Read back the plan file.
 - Success: Output "Created specs/bug-fixes-implementation-plan.md ✓"
@@ -436,7 +389,9 @@ Create `specs/bug-fixes-implementation-plan.md`:
 
 ## PATH C: Improvement/Refactor
 
-### C1: Interview About the Improvement
+### C1: Interview About the Improvement (Ephemeral Analysis)
+
+**NOTE:** This interview captures context for YOU to understand the work. The plan is just a checklist—Goal/Current/Target/Why stays in this conversation.
 
 Interview about:
 - What improvement this achieves
@@ -486,30 +441,11 @@ Create `specs/[name]-refactor-implementation-plan.md`:
 ```markdown
 # Refactor: [Name] Implementation Plan
 
-## Sources Consulted
-- [Library/framework name]: [specific doc page or Context7 query used]
-- [Pattern/practice reference]: [what was learned about proper patterns]
-
-## Goal
-[What improvement this achieves]
-
-## Current State
-[How it works now]
-
-## Target State
-[How it should work after]
-
-## Why This Approach
-[Explain why this refactor follows best practices. Reference sources consulted. If there were alternative approaches, explain why this one was chosen.]
-
-## Checklist
 - [ ] `[file path]:[start-end lines]`: [specific change]
 - [ ] `[file path]:[start-end lines]`: [specific change]
-
-Example: `- [ ] \`src/utils/helpers.ts:15-30\`: Extract validation logic into separate function`
 ```
 
-**Do NOT add extra sections** like "Implementation Details" or code snippets. The loop will write the code during implementation. Stick to the template above.
+**Plan format:** Just a title and checklist items. Goal/Current/Target/Why analysis happens in this conversation—it doesn't go in the plan.
 
 **CHECKPOINT:** Read back the plan file.
 - Success: Output "Created specs/[name]-refactor-implementation-plan.md ✓"
@@ -531,12 +467,45 @@ The loop runs `cat prompt.md | claude` from the project root, so prompt.md must 
 1. Read it to extract the current plan reference (look for `specs/[name]-implementation-plan.md`)
 2. If setting up NEW work: use the new plan file just created
 3. If just refreshing: keep the extracted plan reference
-4. Regenerate `./prompt.md` with latest template
-5. Output: "prompt.md refreshed ✓ (Plan: [plan-file])"
+4. **Auto-migrate verbose plan if detected** (see migration logic below)
+5. Regenerate `./prompt.md` with latest template
+6. Output: "prompt.md refreshed ✓ (Plan: [plan-file])"
 
 **If `./prompt.md` doesn't exist (project root):**
 1. Create `./prompt.md` in the project root (NOT specs/)
 2. Output: "Created prompt.md ✓"
+
+**Auto-Migration Logic (for refreshing existing plans):**
+
+If refreshing and plan file exists, check for verbose format markers:
+- `### Problem`, `### Reproduction`, `### Root Cause`, `### Fix`
+- `**Confidence:`, `**Why This Fix`, `**Trade-off:`
+- `## Workflow` embedded section
+- `## Sources Consulted`
+- `## Why This Approach`, `## Goal`, `## Current State`, `## Target State`, `## Notes`
+
+If verbose format detected:
+1. Extract section headers (`## Bug 1: [Name]`, `## Phase 1: [Name]`, etc.)
+2. Extract all checklist items (`- [ ]` and `- [x]` lines with nested bullets)
+3. Preserve `## Discovered Issues` section if present
+4. Discard everything else (Problem, Reproduction, Root Cause, Why, Sources, etc.)
+5. Reconstruct lean plan:
+   ```markdown
+   # [Plan Title]
+
+   ## [Section Header]
+   - [ ] `[file]:[lines]`: [change]
+   - [x] `[file]:[lines]`: [completed change]
+
+   ---
+
+   ## [Next Section]
+   - [ ] `[file]:[lines]`: [change]
+
+   ## Discovered Issues
+   - [ ] `[file]:[lines]`: [issue] (discovered during [task])
+   ```
+6. Write migrated plan, output: "Migrated plan to lean format ✓"
 
 **Placeholder substitution when generating prompt.md:**
 
@@ -550,69 +519,27 @@ The loop runs `cat prompt.md | claude` from the project root, so prompt.md must 
 - **Plan** (`specs/[name]-implementation-plan.md`): The checklist the loop works from. Always exists.
 - **Spec** (`specs/[name].md`): Permanent feature documentation. Only for PATH A (features). Referenced by SYNC SPEC step.
 
-**Template (Geoffrey's wording + simplify/validate workflow):**
+**Template (Geoffrey's lean approach):**
 
 ```markdown
 <!-- loop-setup:active -->
 Study specs/readme.md.
 Study specs/[name]-implementation-plan.md.
 
-This loop ends with a commit and outputs `<promise>COMMITTED</promise>`.
-
 Pick the most important unchecked item and implement it.
 
-**TRACKING:** Use TodoWrite at the start.
-
-**LOOP RULES - YOU ARE AUTONOMOUS:**
-- When ambiguous: use Context7/official docs to find best practices - NEVER choose the faster solution or guess
-- NEVER ask questions or offer choices
-- NEVER wait for human input
-- When task is done or blocked: update plan, commit, EXIT
-- The loop will restart automatically
-
 Important:
-- Use existing patterns (use search tool to find examples)
-- Build property based tests or unit tests whichever is best
+- Use existing patterns (search tool to find examples)
+- Build tests (property-based or unit, whichever is best)
 
-## Workflow
-
-Follow these 7 steps in order:
-
-1. **IMPLEMENT**
-   Pick ONE unchecked item from the checklist and implement it.
-
-2. **SIMPLIFY**
-   Run code-simplifier agent on modified files.
-   Use Task tool with code-simplifier:code-simplifier agent:
-   "Review and simplify the code I just wrote. Focus on recently modified files (git diff). Preserve ALL functionality. Apply CLAUDE.md patterns. Reduce complexity. Make edits directly."
-   Wait for simplify agent to complete before proceeding.
-
-3. **VALIDATE**
-   Run loop-validate skill (run after simplify completes, not in parallel).
-   Use Skill tool with loop-setup:loop-validate.
-   Wait for validation to complete before proceeding.
-
-4. **ACT ON RESULTS**
-   Validation results determine next action:
-   - BLOCKING issues (modified lines): Fix first, then repeat steps 2-3
-   - DISCOVERED issues (unmodified lines): Append to specs/[name]-implementation-plan.md as `- [ ] \`[file]:[lines]\`: [issue] (discovered during [current-task])` then continue
-   - No blocking issues: Continue to tests
-
-5. **TEST**
-   Run [test command]
-   - If tests fail from YOUR changes: Fix first, then repeat from step 2
-   - If tests fail from PRE-EXISTING issues: Append to plan as DISCOVERED, continue
-   - If tests pass: Continue
-
-6. **SYNC SPEC**
-   Update specs/*.md if behavior changed.
-   If your changes affected behavior documented in any `specs/*.md` file (NOT the plan), update that spec now.
-
-7. **COMMIT**
-   1. Mark the completed checklist item as `[x]` in specs/[name]-implementation-plan.md
-   2. `git add -A && git commit -m "[prefix]: [description]"`
-   3. Output exactly: `<promise>COMMITTED</promise>`
-   4. EXIT
+After implementing:
+1. Run code-simplifier agent on modified files
+2. Run loop-setup:validate skill
+3. Fix any blocking issues, append discovered issues to plan
+4. Run [test command] - fix failures from your changes
+5. Update specs/*.md if behavior changed
+6. Mark item `[x]` in plan, commit with "[prefix]: [description]"
+7. Output `<promise>COMMITTED</promise>` and EXIT
 ```
 
 **CHECKPOINT:** Read back `./prompt.md` (project root) and verify it references the correct plan file.

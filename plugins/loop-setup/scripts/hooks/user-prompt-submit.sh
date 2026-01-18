@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-STATE_FILE=".claude/loop-setup.local.md"
+STATE_FILE="${CLAUDE_PROJECT_DIR:-.}/.claude/loop-setup.local.md"
 
 # Log function for debugging (writes to stderr)
 log() {
@@ -71,7 +71,7 @@ fi
 log "First prompt with loop-setup marker detected, creating state file"
 
 # Ensure .claude directory exists
-mkdir -p .claude
+mkdir -p "${CLAUDE_PROJECT_DIR:-.}/.claude"
 
 # Get current timestamp
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")

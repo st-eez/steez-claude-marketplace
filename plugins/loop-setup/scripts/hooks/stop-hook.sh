@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-STATE_FILE=".claude/loop-setup.local.md"
+STATE_FILE="${CLAUDE_PROJECT_DIR:-.}/.claude/loop-setup.local.md"
 MAX_BLOCKED_ATTEMPTS=5
 
 # Log function for debugging (writes to stderr)

@@ -52,14 +52,18 @@ if [[ -n "$TRANSCRIPT_PATH" ]] && [[ -f "$TRANSCRIPT_PATH" ]]; then
     fi
 fi
 
-# 3. Check if prompt.md exists and has the loop-setup marker
-if [[ ! -f "prompt.md" ]]; then
-    log "No prompt.md found, skipping"
+# 3. Check if the USER'S PROMPT contains the loop-setup marker
+# This triggers when running: cat prompt.md | claude
+# Does NOT trigger when running: /loop-setup:setup or other commands
+USER_PROMPT=$(echo "$INPUT" | jq -r '.prompt // empty')
+
+if [[ -z "$USER_PROMPT" ]]; then
+    log "No user prompt in hook input, skipping"
     exit 0
 fi
 
-if ! grep -q '<!-- loop-setup:active -->' prompt.md 2>/dev/null; then
-    log "prompt.md exists but lacks loop-setup:active marker, skipping"
+if ! echo "$USER_PROMPT" | grep -q '<!-- loop-setup:active -->'; then
+    log "User prompt does not contain loop-setup:active marker, skipping"
     exit 0
 fi
 

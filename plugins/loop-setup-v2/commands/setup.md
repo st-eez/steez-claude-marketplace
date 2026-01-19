@@ -51,6 +51,14 @@ Interview (max 5 exchanges, "I don't care" = complete):
 
 Wait for user confirmation before creating files.
 
+**Explore codebase**: Launch Explore agent to discover patterns:
+> "Find patterns in the codebase: naming conventions, test approaches, error handling, code organization, API styles. Return: pattern name, example file:line."
+
+**Present patterns**: List discovered patterns, ask which to enforce:
+> "Found these patterns: [list]. Which should the loop follow? (select all that apply, or 'none')"
+
+Store confirmed patterns for prompt.md Important section.
+
 Create `specs/[name].md` (spec) with clear sections documenting the feature.
 
 Create `specs/[name]-plan.md` using this format:
@@ -266,6 +274,8 @@ Pick the most important unchecked item. Implement it.
 Important:
 - Build tests (property-based or unit, whichever is best)
 - Use existing patterns in the codebase (search to find examples)
+[For each confirmed pattern from exploration:]
+- Follow [pattern name] (see [file:line] for example)
 
 After: Run [test command]. Update specs if behavior changed. Mark [x] in plan. Commit. Exit.
 ```

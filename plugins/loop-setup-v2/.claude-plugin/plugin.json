@@ -1,0 +1,7 @@
+{
+  "name": "loop-setup-v2",
+  "version": "2.0.0",
+  "description": "Ralph Loop enabler - forward/reverse/investigation/resolution loop patterns",
+  "author": { "name": "steez" },
+  "license": "MIT"
+}

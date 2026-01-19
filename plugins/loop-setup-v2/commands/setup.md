@@ -56,6 +56,11 @@ Interview (max 5 exchanges, "I don't care" = complete):
 - What do you want to document?
 - What sources should I look at? (codebase paths, URLs, PDFs, user guides, marketing materials, documentation)
 
+**Confirm understanding**: Present summary:
+> "Documenting [target] from [sources]. READY? Reply 'go' to proceed."
+
+Wait for user confirmation before exploring sources.
+
 1. **Explore sources**: For each source type:
    - Codebase paths: Launch Explore agent to identify features/modules
    - URLs/PDFs/docs: Read and extract key behaviors, constraints, patterns

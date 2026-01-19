@@ -38,6 +38,11 @@ Interview (max 5 exchanges, "I don't care" = complete):
 - What sources should I look at? (design docs, API specs, URLs, code patterns, feature requests)
 - Constraints/preferences?
 
+**Confirm understanding**: Present summary:
+> "Building [feature] using [sources]. Constraints: [constraints]. READY? Reply 'go' to proceed."
+
+Wait for user confirmation before creating files.
+
 Create `specs/[name].md` (spec) and `specs/[name]-plan.md` (checklist with `file:lines` citations).
 Update lookup table with 8+ keywords.
 

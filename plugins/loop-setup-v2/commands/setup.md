@@ -206,12 +206,15 @@ After: Mark [x] in plan. Commit. EXIT.
 
 ## Step 3: Create CLAUDE.md
 
-If `.claude/CLAUDE.md` doesn't exist, create it:
+If `.claude/CLAUDE.md` doesn't exist, create minimal starter (user expands iteratively, 60-70 lines MAX):
 ```markdown
 # [Project]
 
-Read `specs/readme.md` for spec lookup. One goal per context window.
-Cite `file:line` when referencing code. Verify changes compile/pass tests.
+Read specs/readme.md for context lookup. One goal per context window.
+Cite file:line when referencing code.
+
+Before implementing: Search specs keywords for existing patterns.
+After changes: Run tests. Update specs if behavior changed.
 ```
 
 ## Step 4: Create prompt.md

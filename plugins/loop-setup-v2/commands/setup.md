@@ -142,6 +142,8 @@ Wait for user confirmation before exploring sources.
    - [ ] `file:lines`: [change description] | refs: specs/[name].md
    ```
 
+**Note**: Reverse mode documents existing code. To add new features, run `/setup` again in Forward mode (new session).
+
 ---
 
 ### Investigate Mode

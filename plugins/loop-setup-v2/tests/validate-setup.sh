@@ -37,6 +37,11 @@ SPEC_TEMPLATE=(
     "## Key Files"
 )
 
+# Mode guidance patterns
+MODE_GUIDANCE=(
+    "Reverse mode documents existing code.*Forward mode"
+)
+
 errors=0
 
 echo "Validating setup.md structure..."
@@ -80,6 +85,18 @@ for section in "${SPEC_TEMPLATE[@]}"; do
         echo "✓ Found $count occurrences: $section"
     else
         echo "✗ MISSING or insufficient: $section (found $count, need 2+)"
+        ((errors++))
+    fi
+done
+
+# Validate mode guidance patterns
+echo ""
+echo "Checking mode guidance..."
+for pattern in "${MODE_GUIDANCE[@]}"; do
+    if grep -qE "$pattern" "$SETUP_FILE"; then
+        echo "✓ Found: $pattern"
+    else
+        echo "✗ MISSING: $pattern"
         ((errors++))
     fi
 done

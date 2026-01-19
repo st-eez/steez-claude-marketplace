@@ -2,7 +2,7 @@
 description: Scaffold Ralph Loop files (specs, prompt.md, plan)
 arguments:
   - name: mode
-    description: "forward (build), reverse (extract), investigate (identify), resolve (fix)"
+    description: "forward (build), reverse (extract), investigate (identify), resolve (fix), specialized (domain patterns)"
     required: false
 user_invocable: true
 ---
@@ -27,7 +27,7 @@ Create `specs/readme.md`:
 
 ## Step 2: Determine Mode
 
-{{#if mode}}Mode: {{mode}}{{else}}Ask: "Which mode? Forward (build), Reverse (extract), Investigate (identify), or Resolve (fix)?"{{/if}}
+{{#if mode}}Mode: {{mode}}{{else}}Ask: "Which mode? Forward (build), Reverse (extract), Investigate (identify), Resolve (fix), or Specialized (domain patterns)?"{{/if}}
 
 ---
 
@@ -114,6 +114,44 @@ Study specs/investigate-[issue].md.
 Study specs/resolve-[issue]-plan.md.
 
 Pick the most important unchecked fix. Implement it.
+
+After: Mark [x] in plan. Commit. EXIT.
+```
+
+---
+
+### Specialized Mode
+
+**Purpose**: Domain-specific loops (i18n, security, quality, testing). One concern per loop.
+
+1. Ask: "Which pattern? i18n, security, quality, or testing?"
+
+2. **Explore**: Launch Explore agent for affected files:
+   - i18n: "Find user-facing strings, labels, error messages"
+   - security: "Find auth, input validation, data exposure points"
+   - quality: "Find code smells, duplication, naming inconsistencies"
+   - testing: "Find untested functions, edge cases, coverage gaps"
+
+3. **Create pattern spec** `specs/[pattern]-patterns.md`:
+```markdown
+# [Pattern] Patterns
+**Purpose**: [what this loop enforces]
+**Targets**: [file:line citations]
+**Rules**: [specific patterns to apply]
+```
+
+4. **Create plan** `specs/[pattern]-plan.md` with checklist of targets.
+
+5. Update lookup table with keywords: [pattern], loop, specialized, [domain terms].
+
+6. **Create prompt.md**:
+```markdown
+<!-- loop-setup:active -->
+Study specs/readme.md.
+Study specs/[pattern]-patterns.md.
+Study specs/[pattern]-plan.md.
+
+Pick the most important unchecked item. Apply the pattern.
 
 After: Mark [x] in plan. Commit. EXIT.
 ```

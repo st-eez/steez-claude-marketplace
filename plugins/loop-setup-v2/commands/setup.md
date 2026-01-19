@@ -30,11 +30,12 @@ Create `specs/readme.md`:
 |------|------|------------------------------|
 | [name] | specs/[name].md | term1, term2, term3, term4, term5, term6, term7, term8 |
 
-<!-- Example: Use synonyms and related terms for cache hits -->
+<!-- Include: abbreviations (auth/authentication), related concepts (login/session/jwt),
+     and terms users might search for. More keywords = better cache hits. -->
 <!-- | Auth | specs/auth.md | authentication, login, logout, session, jwt, token, oauth, signin, signup | -->
 ```
 
-**Checkpoint**: Read back `specs/readme.md`. If content matches intent, output "✓ PIN created". If missing or malformed, retry creation.
+**Checkpoint**: Read back `specs/readme.md`. Verify: file exists, structure matches template, content reflects interview. If missing or malformed, retry. Output "✓ PIN created" when verified.
 
 ## Step 2: Determine Mode
 
@@ -62,13 +63,21 @@ Wait for user confirmation before creating files.
 
 Store confirmed patterns for prompt.md Important section.
 
+**Check for existing files:**
+If any target files exist (`specs/[name].md`, `specs/[name]-plan.md`, `prompt.md`), ask:
+> "Found existing files. Update to current format (keeps your intent)?"
+
+- **Yes**: Read existing files. Extract: goals, constraints, key decisions, file references.
+  Overwrite with proper structure, carrying forward what the user was trying to accomplish.
+- **No**: Skip existing files, only create missing ones
+
 Create `specs/[name].md` using this template:
 ```markdown
 # [Name]
 **Stack**: [relevant stack subset] | **Tests**: [test command if different from root]
 
 ## What It Does
-[Core behavior in 2-3 sentences]
+[Core behavior in 2-3 sentences. Brevity matters—specs are read every loop iteration.]
 
 ## Constraints
 - [Technical constraints]
@@ -80,6 +89,7 @@ Create `specs/[name].md` using this template:
 - `src/other.ts:15`: [what this code handles]
 ```
 
+<!-- Strong linkage: file:line lets the loop find exact code. refs: links to spec for context. -->
 Create `specs/[name]-plan.md` using this format:
 ```markdown
 # [Name] Plan
@@ -105,47 +115,45 @@ Interview (max 5 exchanges, "I don't care" = complete):
 - What sources should I look at? (codebase paths, URLs, PDFs, user guides, marketing materials, documentation)
 
 **Confirm understanding**: Present summary:
-> "Documenting [target] from [sources]. READY? Reply 'go' to proceed."
+> "Extracting specs for [target] from [sources]. READY? Reply 'go' to proceed."
 
-Wait for user confirmation before exploring sources.
+Wait for user confirmation before creating files.
 
-1. **Explore sources**: For each source type:
-   - Codebase paths: Launch Explore agent to identify features/modules
-   - URLs/PDFs/docs: Read and extract key behaviors, constraints, patterns
+**Check for existing files:**
+If any target files exist (`specs/reverse-[target]-plan.md`, `prompt.md`), ask:
+> "Found existing files. Update to current format (keeps your intent)?"
 
-2. **Present findings**: List discovered features/behaviors, ask which to document.
+- **Yes**: Read existing files. Extract: goals, constraints, key decisions, file references.
+  Overwrite with proper structure, carrying forward what the user was trying to accomplish.
+- **No**: Skip existing files, only create missing ones
 
-3. **For each selected item**:
-   - Synthesize understanding from all sources
-   - Interview briefly: "So [feature] does X—correct? Any constraints?"
-   - Create `specs/[name].md` using this template:
-     ```markdown
-     # [Name]
-     **Stack**: [relevant stack subset] | **Tests**: [test command if different from root]
+1. **Create extraction plan** `specs/reverse-[target]-plan.md`:
+```markdown
+# Reverse [Target] Plan
 
-     ## What It Does
-     [Core behavior in 2-3 sentences]
+## Checklist
+- [ ] Extract from `[source]`: [what to document] | type: [codebase/URL/PDF]
+```
 
-     ## Constraints
-     - [Technical constraints]
-     - [Business rules]
-     - [Performance requirements]
+2. Update lookup table with keywords: reverse, extract, document, [target terms].
 
-     ## Key Files
-     - `src/file.ts:42-58`: [what this code handles]
-     - `src/other.ts:15`: [what this code handles]
-     ```
-   - Update lookup table with 8+ keywords
+3. **Create prompt.md**:
+```markdown
+<!-- loop-setup:active -->
+Study specs/readme.md.
+Study specs/reverse-[target]-plan.md.
 
-4. **Optional plan**: If user wants improvements/tests, create `specs/[name]-plan.md` using the standard plan format:
-   ```markdown
-   # [Name] Plan
+Pick the most important unchecked item. Extract the spec:
+1. Study the source
+2. Create specs/[name].md using standard template
+3. Update lookup table with 8+ keywords
 
-   ## Checklist
-   - [ ] `file:lines`: [change description] | refs: specs/[name].md
-   ```
+After: Mark [x] in plan. Commit. EXIT.
+```
 
-**Note**: Reverse mode documents existing code. To add new features, run `/setup` again in Forward mode (new session).
+**Checkpoint**: Read back files. If content matches intent, output "✓ created". If missing or malformed, retry.
+
+**Note**: Reverse mode extracts specs from existing sources. To build new features, run `/setup forward` (new session).
 
 ---
 
@@ -160,34 +168,56 @@ Interview (max 5 exchanges, "I don't care" = complete):
 **Confirm understanding**: Present summary:
 > "Investigating [issue/symptom] using [sources]. READY? Reply 'go' to proceed."
 
-Wait for user confirmation before exploring sources.
+Wait for user confirmation before creating files.
 
-1. **Explore sources**: For each source type:
-   - Codebase paths: Launch Explore agent to identify affected code
-   - Error logs/stack traces: Analyze for root cause patterns
-   - Bug reports/URLs: Extract reproduction steps and context
+**Check for existing files:**
+If any target files exist (`specs/investigate-[issue].md`, `specs/investigate-[issue]-plan.md`, `prompt.md`), ask:
+> "Found existing files. Update to current format (keeps your intent)?"
 
-2. **Document findings**: Create `specs/investigate-[issue].md`:
+- **Yes**: Read existing files. Extract: goals, constraints, key decisions, file references.
+  Overwrite with proper structure, carrying forward what the user was trying to accomplish.
+- **No**: Skip existing files, only create missing ones
+
+1. **Create findings file** `specs/investigate-[issue].md`:
 ```markdown
 # Investigation: [Issue]
 **Symptom**: [description]
-**Affected files**: [file:line citations]
-**Root cause**: [hypothesis]
-**Resolution**: [recommended fix approach]
+
+## Findings
+<!-- Loop documents findings here -->
+
+## Conclusion
+**Root cause**: TBD
+**Recommended resolution**: TBD
 ```
 
-3. Update lookup table with keywords: issue, bug, investigate, [symptom terms].
+2. **Create investigation plan** `specs/investigate-[issue]-plan.md`:
+```markdown
+# Investigate [Issue] Plan
 
-4. **Create prompt.md** for resolution:
+## Checklist
+- [ ] Check `[source]`: [what to look for] | refs: specs/investigate-[issue].md
+```
+
+3. Update lookup table with keywords: investigate, bug, issue, [symptom terms].
+
+4. **Create prompt.md**:
 ```markdown
 <!-- loop-setup:active -->
 Study specs/readme.md.
-Study specs/investigate-[issue].md.
+Study specs/investigate-[issue]-plan.md.
 
-Implement the recommended resolution. Verify fix works.
+Pick the most important unchecked task. Investigate:
+1. Examine the source
+2. Document findings in specs/investigate-[issue].md
+3. If root cause found: Update conclusion section
 
-After: Delete investigate file. Commit. EXIT.
+After: Mark [x] in plan. Commit. EXIT.
 ```
+
+**Checkpoint**: Read back files. If content matches intent, output "✓ created". If missing or malformed, retry.
+
+**Note**: After investigation complete, run `/setup resolve` to create fix plan.
 
 ---
 
@@ -207,6 +237,14 @@ Interview (max 3 exchanges, "I don't care" = complete):
 
 Wait for user confirmation before creating plan.
 
+**Check for existing files:**
+If any target files exist (`specs/resolve-[issue]-plan.md`, `prompt.md`), ask:
+> "Found existing files. Update to current format (keeps your intent)?"
+
+- **Yes**: Read existing files. Extract: goals, constraints, key decisions, file references.
+  Overwrite with proper structure, carrying forward what the user was trying to accomplish.
+- **No**: Skip existing files, only create missing ones
+
 2. **Create resolution plan**: Create `specs/resolve-[issue]-plan.md`:
 ```markdown
 # Resolve [Issue] Plan
@@ -222,13 +260,14 @@ Wait for user confirmation before creating plan.
 ```markdown
 <!-- loop-setup:active -->
 Study specs/readme.md.
-Study specs/investigate-[issue].md.
 Study specs/resolve-[issue]-plan.md.
 
 Pick the most important unchecked fix. Implement it.
 
 After: Mark [x] in plan. Commit. EXIT.
 ```
+
+**Checkpoint**: Read back files. If content matches intent, output "✓ created". If missing or malformed, retry.
 
 ---
 
@@ -246,6 +285,14 @@ After: Mark [x] in plan. Commit. EXIT.
 > "Addressing [concern] using [sources]. READY? Reply 'go' to proceed."
 
 Wait for user confirmation before exploring sources.
+
+**Check for existing files:**
+If any target files exist (`specs/[concern]-patterns.md`, `specs/[concern]-plan.md`, `prompt.md`), ask:
+> "Found existing files. Update to current format (keeps your intent)?"
+
+- **Yes**: Read existing files. Extract: goals, constraints, key decisions, file references.
+  Overwrite with proper structure, carrying forward what the user was trying to accomplish.
+- **No**: Skip existing files, only create missing ones
 
 3. **Explore**: Launch Explore agent for affected files based on described concern:
    > "Find code related to [concern]. Return: files, patterns, opportunities."
@@ -273,13 +320,14 @@ Wait for user confirmation before exploring sources.
 ```markdown
 <!-- loop-setup:active -->
 Study specs/readme.md.
-Study specs/[concern]-patterns.md.
 Study specs/[concern]-plan.md.
 
 Pick the most important unchecked item. Apply the pattern.
 
 After: Mark [x] in plan. Commit. EXIT.
 ```
+
+**Checkpoint**: Read back files. If content matches intent, output "✓ created". If missing or malformed, retry.
 
 ---
 
@@ -295,11 +343,16 @@ Cite file:line when referencing code.
 Before implementing: Search specs keywords for existing patterns.
 Stay focused: Only fix issues caused by your changes. Discovered issues → append to plan, continue.
 After changes: Run tests. Update specs if behavior changed.
+
+Avoid multi-line bash—use separate tool calls.
+Configure test runner to only output failing tests (minimizes context usage).
 ```
 
 **Checkpoint**: Read back `.claude/CLAUDE.md`. If content matches intent, output "✓ CLAUDE.md created". If missing or malformed, retry.
 
 ## Step 4: Create prompt.md
+
+**Forward mode only.** Other modes create their own prompt.md in Step 2. If not Forward mode, skip to Step 5.
 
 ```markdown
 <!-- loop-setup:active -->
@@ -313,6 +366,10 @@ Important:
 - Use existing patterns in the codebase (search to find examples)
 [For each confirmed pattern from exploration:]
 - Follow [pattern name] (see [file:line] for example)
+
+Permissions:
+- You may add temporary logging for debugging
+[Add user-specified permissions here, e.g.: deploy, modify configs, etc.]
 
 After: Run [test command]. Update specs if behavior changed. Mark [x] in plan. Commit. Exit.
 ```
@@ -332,6 +389,8 @@ Output format:
 ```
 ✓ Created: specs/readme.md, specs/[name].md, specs/[name]-plan.md, prompt.md
 ```
+
+**Before running**: Read your specs yourself. One bad spec compounds into 10,000 lines of wrong code.
 
 **Running the loop:**
 

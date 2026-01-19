@@ -7,6 +7,12 @@
       "source": "./plugins/loop-setup",
       "description": "Ralph Loop scaffolding - specs, PIN, implementation plans for bash loop workflow",
       "version": "1.0.0"
+    },
+    {
+      "name": "loop-setup-v2",
+      "source": "./plugins/loop-setup-v2",
+      "description": "Ralph Loop enabler - forward, reverse, investigation, resolution, specialized loop patterns",
+      "version": "2.0.0"
     }
   ]
 }

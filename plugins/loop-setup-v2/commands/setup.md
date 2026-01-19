@@ -122,34 +122,36 @@ After: Mark [x] in plan. Commit. EXIT.
 
 ### Specialized Mode
 
-**Purpose**: Domain-specific loops (i18n, security, quality, testing). One concern per loop.
+**Purpose**: Single-concern loops. One domain concern per loop (caching, accessibility, error handling, performance, etc.).
 
-1. Ask: "Which pattern? i18n, security, quality, or testing?"
+1. Ask: "What concern should this loop address?" (user describes it)
 
-2. **Explore**: Launch Explore agent for affected files:
-   - i18n: "Find user-facing strings, labels, error messages"
-   - security: "Find auth, input validation, data exposure points"
-   - quality: "Find code smells, duplication, naming inconsistencies"
-   - testing: "Find untested functions, edge cases, coverage gaps"
+2. **Interview** (max 3 exchanges):
+   - Understand the concern
+   - Ask: "What sources? External guides, best practices docs, codebase patterns?"
 
-3. **Create pattern spec** `specs/[pattern]-patterns.md`:
+3. **Explore**: Launch Explore agent for affected files based on described concern:
+   > "Find code related to [concern]. Return: files, patterns, opportunities."
+
+4. **Create concern spec** `specs/[concern]-patterns.md`:
 ```markdown
-# [Pattern] Patterns
+# [Concern] Patterns
 **Purpose**: [what this loop enforces]
+**Sources**: [guides, docs consulted]
 **Targets**: [file:line citations]
 **Rules**: [specific patterns to apply]
 ```
 
-4. **Create plan** `specs/[pattern]-plan.md` with checklist of targets.
+5. **Create plan** `specs/[concern]-plan.md` with checklist of targets.
 
-5. Update lookup table with keywords: [pattern], loop, specialized, [domain terms].
+6. Update lookup table with keywords: [concern], loop, specialized, [domain terms].
 
-6. **Create prompt.md**:
+7. **Create prompt.md**:
 ```markdown
 <!-- loop-setup:active -->
 Study specs/readme.md.
-Study specs/[pattern]-patterns.md.
-Study specs/[pattern]-plan.md.
+Study specs/[concern]-patterns.md.
+Study specs/[concern]-plan.md.
 
 Pick the most important unchecked item. Apply the pattern.
 

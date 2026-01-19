@@ -9,7 +9,7 @@ user_invocable: true
 
 # Loop Setup v2
 
-Scaffold files for Ralph Loop. This command ONLY creates files—never implement.
+Scaffold files for Ralph Loop. This command creates files only.
 
 ## Step 1: Check PIN
 
@@ -187,4 +187,4 @@ Output files created. Next:
 cat prompt.md | claude --dangerously-skip-permissions
 ```
 
-STOP. Do not implement.
+STOP here. Scaffolding complete.

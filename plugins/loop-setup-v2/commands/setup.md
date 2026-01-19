@@ -61,7 +61,17 @@ Update lookup table with 8+ keywords.
 
 ---
 
-## Step 3: Create prompt.md
+## Step 3: Create CLAUDE.md
+
+If `.claude/CLAUDE.md` doesn't exist, create it:
+```markdown
+# [Project]
+
+Read `specs/readme.md` for spec lookup. One goal per context window.
+Cite `file:line` when referencing code. Verify changes compile/pass tests.
+```
+
+## Step 4: Create prompt.md
 
 ```markdown
 <!-- loop-setup:active -->
@@ -73,7 +83,7 @@ Pick the most important unchecked item. Implement it.
 After: Mark [x] in plan. Commit. EXIT.
 ```
 
-## Step 4: Summary
+## Step 5: Summary
 
 Output files created. Next:
 ```

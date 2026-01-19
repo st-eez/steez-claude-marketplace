@@ -284,7 +284,21 @@ List all files created during this setup:
 Output format:
 ```
 ✓ Created: specs/readme.md, specs/[name].md, specs/[name]-plan.md, prompt.md
-Next: cat prompt.md | claude --dangerously-skip-permissions
 ```
+
+**Running the loop:**
+
+1. **Attended first** - Run single iteration, watch output:
+   ```
+   cat prompt.md | claude
+   ```
+   Get curious why it did what it did. Check the commit, the tests, the changes.
+
+2. **Tune** - If something weird happens, adjust `prompt.md` or specs. Run again attended. Repeat until behavior matches expectations.
+
+3. **Unattended** - Once you trust it, let it loop:
+   ```
+   cat prompt.md | claude --dangerously-skip-permissions
+   ```
 
 STOP here. Scaffolding complete.

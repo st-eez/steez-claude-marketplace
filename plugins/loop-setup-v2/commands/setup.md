@@ -217,7 +217,7 @@ Study specs/[name]-plan.md.
 
 Pick the most important unchecked item. Implement it.
 
-After: Mark [x] in plan. Commit. EXIT.
+After: Run [test command]. Mark [x] in plan. Commit. Exit.
 ```
 
 ## Step 5: Summary

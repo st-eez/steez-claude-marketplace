@@ -85,6 +85,11 @@ Interview (max 5 exchanges, "I don't care" = complete):
 - What's the issue/symptom to investigate?
 - What sources should I look at? (codebase paths, error logs, stack traces, bug report URLs, issue tracker links)
 
+**Confirm understanding**: Present summary:
+> "Investigating [issue/symptom] using [sources]. READY? Reply 'go' to proceed."
+
+Wait for user confirmation before exploring sources.
+
 1. **Explore sources**: For each source type:
    - Codebase paths: Launch Explore agent to identify affected code
    - Error logs/stack traces: Analyze for root cause patterns

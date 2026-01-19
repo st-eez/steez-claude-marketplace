@@ -227,7 +227,11 @@ Study specs/[name]-plan.md.
 
 Pick the most important unchecked item. Implement it.
 
-After: Run [test command]. Mark [x] in plan. Commit. Exit.
+Important:
+- Build tests (property-based or unit, whichever is best)
+- Use existing patterns in the codebase (search to find examples)
+
+After: Run [test command]. Update specs if behavior changed. Mark [x] in plan. Commit. Exit.
 ```
 
 ## Step 5: Summary

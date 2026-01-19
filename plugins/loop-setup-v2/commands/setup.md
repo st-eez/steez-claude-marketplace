@@ -71,12 +71,16 @@ Interview (max 5 exchanges, "I don't care" = complete):
 
 **Purpose**: Identify root cause of bugs/issues. Produces findings for resolution loop.
 
-1. Ask: "What's the issue/symptom to investigate?"
+Interview (max 5 exchanges, "I don't care" = complete):
+- What's the issue/symptom to investigate?
+- What sources should I look at? (codebase paths, error logs, stack traces, bug report URLs, issue tracker links)
 
-2. **Explore**: Launch Explore agent to identify affected code:
-   > "Find code related to [symptom]. Return: files, functions, data flow."
+1. **Explore sources**: For each source type:
+   - Codebase paths: Launch Explore agent to identify affected code
+   - Error logs/stack traces: Analyze for root cause patterns
+   - Bug reports/URLs: Extract reproduction steps and context
 
-3. **Document findings**: Create `specs/investigate-[issue].md`:
+2. **Document findings**: Create `specs/investigate-[issue].md`:
 ```markdown
 # Investigation: [Issue]
 **Symptom**: [description]
@@ -85,9 +89,9 @@ Interview (max 5 exchanges, "I don't care" = complete):
 **Resolution**: [recommended fix approach]
 ```
 
-4. Update lookup table with keywords: issue, bug, investigate, [symptom terms].
+3. Update lookup table with keywords: issue, bug, investigate, [symptom terms].
 
-5. **Create prompt.md** for resolution:
+4. **Create prompt.md** for resolution:
 ```markdown
 <!-- loop-setup:active -->
 Study specs/readme.md.

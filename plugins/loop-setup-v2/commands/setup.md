@@ -31,6 +31,8 @@ Create `specs/readme.md`:
 | [name] | specs/[name].md | term1, term2, term3, term4, term5, term6, term7, term8 |
 ```
 
+**Checkpoint**: Read back `specs/readme.md`. If content matches intent, output "✓ PIN created". If missing or malformed, retry creation.
+
 ## Step 2: Determine Mode
 
 {{#if mode}}Mode: {{mode}}{{else}}Ask: "Which mode? Forward (build), Reverse (extract), Investigate (identify), Resolve (fix), or Specialized (domain patterns)?"{{/if}}
@@ -51,6 +53,9 @@ Wait for user confirmation before creating files.
 
 Create `specs/[name].md` (spec) and `specs/[name]-plan.md` (checklist with `file:lines` citations).
 Update lookup table with 8+ keywords.
+
+**Checkpoint**: Read back `specs/[name].md`. If content matches intent, output "✓ spec created". If missing or malformed, retry.
+**Checkpoint**: Read back `specs/[name]-plan.md`. If content matches intent, output "✓ plan created". If missing or malformed, retry.
 
 ---
 
@@ -218,6 +223,8 @@ Stay focused: Only fix issues caused by your changes. Discovered issues → appe
 After changes: Run tests. Update specs if behavior changed.
 ```
 
+**Checkpoint**: Read back `.claude/CLAUDE.md`. If content matches intent, output "✓ CLAUDE.md created". If missing or malformed, retry.
+
 ## Step 4: Create prompt.md
 
 ```markdown
@@ -233,6 +240,8 @@ Important:
 
 After: Run [test command]. Update specs if behavior changed. Mark [x] in plan. Commit. Exit.
 ```
+
+**Checkpoint**: Read back `prompt.md`. If content matches intent, output "✓ prompt.md created". If missing or malformed, retry.
 
 ## Step 5: Summary
 

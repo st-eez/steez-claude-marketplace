@@ -13,7 +13,12 @@ Scaffold files for Ralph Loop. This command creates files only.
 
 ## Step 1: Check PIN
 
-Read `specs/readme.md`. If not found, ask: Project name? Stack? Test command?
+Read `specs/readme.md`. If it exists, proceed to Step 2.
+
+If not found, interview (max 3 exchanges):
+- What's the project name?
+- What's the tech stack?
+- What command runs tests?
 
 Create `specs/readme.md`:
 ```markdown

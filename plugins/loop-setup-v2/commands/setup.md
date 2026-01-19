@@ -51,7 +51,17 @@ Interview (max 5 exchanges, "I don't care" = complete):
 
 Wait for user confirmation before creating files.
 
-Create `specs/[name].md` (spec) and `specs/[name]-plan.md` (checklist with `file:lines` citations).
+Create `specs/[name].md` (spec) with clear sections documenting the feature.
+
+Create `specs/[name]-plan.md` using this format:
+```markdown
+# [Name] Plan
+
+## Checklist
+- [ ] `src/file.ts:42-58`: [change description] | refs: specs/[name].md
+- [ ] `src/other.ts:15`: [change description] | refs: specs/[name].md
+```
+
 Update lookup table with 8+ keywords.
 
 **Checkpoint**: Read back `specs/[name].md`. If content matches intent, output "✓ spec created". If missing or malformed, retry.
@@ -84,7 +94,13 @@ Wait for user confirmation before exploring sources.
    - Create `specs/[name].md` documenting current behavior
    - Update lookup table with 8+ keywords
 
-4. **Optional plan**: If user wants improvements/tests, create `specs/[name]-plan.md`.
+4. **Optional plan**: If user wants improvements/tests, create `specs/[name]-plan.md` using the standard plan format:
+   ```markdown
+   # [Name] Plan
+
+   ## Checklist
+   - [ ] `file:lines`: [change description] | refs: specs/[name].md
+   ```
 
 ---
 
@@ -146,9 +162,16 @@ Interview (max 3 exchanges, "I don't care" = complete):
 
 Wait for user confirmation before creating plan.
 
-2. **Create resolution plan**: Create `specs/resolve-[issue]-plan.md` with:
-   - Checklist of fixes with `file:line` citations
-   - Verification steps (tests, manual checks)
+2. **Create resolution plan**: Create `specs/resolve-[issue]-plan.md`:
+```markdown
+# Resolve [Issue] Plan
+
+## Checklist
+- [ ] `file:lines`: [fix description] | refs: specs/investigate-[issue].md
+
+## Verification
+- [ ] [test or manual check]
+```
 
 3. **Create prompt.md**:
 ```markdown
@@ -191,7 +214,13 @@ Wait for user confirmation before exploring sources.
 **Rules**: [specific patterns to apply]
 ```
 
-5. **Create plan** `specs/[concern]-plan.md` with checklist of targets.
+5. **Create plan** `specs/[concern]-plan.md`:
+```markdown
+# [Concern] Plan
+
+## Checklist
+- [ ] `file:lines`: [pattern to apply] | refs: specs/[concern]-patterns.md
+```
 
 6. Update lookup table with keywords: [concern], loop, specialized, [domain terms].
 

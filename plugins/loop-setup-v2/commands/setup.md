@@ -1,313 +1,69 @@
 ---
-description: Scaffold specs and prompt.md for Ralph Loop workflow
+description: Scaffold Ralph Loop files (specs, prompt.md, plan)
 arguments:
   - name: mode
-    description: "forward (build from specs), reverse (extract specs from code), investigate, resolve"
+    description: "forward (build from scratch), reverse (extract from existing)"
     required: false
 user_invocable: true
 ---
 
 # Loop Setup v2
 
-Scaffold files for Ralph Loop workflow. Creates specs, plans, and prompt.md.
+Scaffold files for a Ralph Loop workflow. This command ONLY creates files.
 
-**You scaffold files only. You never implement.**
+## Step 1: Check PIN
 
-## Core Principles
+Read `specs/readme.md`. If not found, ask:
+- Project name?
+- Tech stack?
+- Test command?
 
-- One context window = one goal
-- ~5K tokens for specs (PIN context)
-- Minimize allocation (stay out of dumb zone: 60-70%)
-- Strong linkage (file:line citations)
-- 8+ keywords in lookup table for cache hits
-
----
-
-## Step 1: Check Project State
-
-Read `specs/readme.md`. If not found, this is a new project.
-
-**New project:** Interview for basics, then create specs/readme.md:
-- "What's this project called?"
-- "Tech stack?" (languages/frameworks)
-- "Test command?" (e.g., `pnpm test`, `swift test`)
+Create `specs/readme.md`:
 
 ```markdown
-# [Project] Specifications
+# [Project] Specs
 
-**Stack**: [tech]
-**Test command**: [cmd]
+**Stack**: [stack]
+**Tests**: [command]
 
-## Keyword Lookup Table
+## Lookup Table
 
-| Spec | File | Search Keywords |
-|------|------|-----------------|
-
-## Current Functionality
-
-[Evolves as specs are added]
+| Spec | File | Keywords |
+|------|------|----------|
 ```
 
-**CHECKPOINT:** Read back specs/readme.md. Success → proceed.
+## Step 2: Interview
 
----
+{{#if mode}}Mode: {{mode}}{{else}}Ask: "Forward (new build) or Reverse (existing code)?"{{/if}}
 
-## Step 2: Determine Mode
+**Forward**: What are you building? Constraints?
+**Reverse**: What existing feature to document?
 
-{{#if mode}}
-Mode: {{mode}} → skip to that mode's section.
-{{else}}
-Ask using AskUserQuestion:
-- **Question:** "What type of work?"
-- **Options:** Forward (build new), Reverse (extract specs), Investigate (diagnose), Resolve (fix known issue)
-{{/if}}
+Max 5 exchanges. Accept "I don't care" as complete.
 
----
+## Step 3: Generate Files
 
-## MODE: Forward (Build from Specs)
+Create `specs/[name].md` (spec) and `specs/[name]-plan.md` (checklist).
 
-### Interview (max 5 exchanges)
+Update lookup table with 8+ keywords.
 
-Quick conversation pattern—accept "I don't care" as complete.
-
-1. **What it does:** "What should [feature] do?"
-2. **Constraints:** "Any limitations? (perf, security, compatibility)"
-3. **Patterns:** Search codebase for similar features. "Found [X pattern] in [file:lines]—follow this?"
-4. **Dependencies:** "What does this connect to?"
-
-**Research before proposing:** Use Context7 for library docs. Never guess.
-
-### Generate Files
-
-**Spec** (`specs/[feature].md`):
-```markdown
-# [Feature Name]
-
-## What It Does
-[From interview]
-
-## Constraints
-[Any limitations, or "None specified"]
-
-## Patterns
-[Existing code to follow: file:lines]
-```
-
-**Plan** (`specs/[feature]-implementation-plan.md`):
-```markdown
-# [Feature] Implementation Plan
-
-- [ ] `[file]:[lines]`: [specific change]
-- [ ] `[file]:[lines]`: [specific change]
-- [ ] `[test-file]`: [tests to add]
-```
-
-**Update lookup table** in specs/readme.md with 8+ keywords.
-
----
-
-## MODE: Reverse (Extract Specs from Code)
-
-### Interview (max 3 exchanges)
-
-1. **Scope:** "Which part of the codebase? (all, specific feature, module)"
-2. **Depth:** "Documentation level? (overview, detailed, exhaustive)"
-3. **Existing docs:** "Any docs to incorporate?" (READMEs, wikis, comments)
-
-### Analysis (use sub-agents)
-
-Launch Explore agents to keep main context lean:
-- **Agent 1:** "Identify main features, entry points, key modules. Return: name, purpose, key files."
-- **Agent 2:** "Analyze architecture, patterns, how modules connect. Return: structure summary."
-
-### Generate Files
-
-For each discovered feature, create `specs/[feature].md`:
-```markdown
-# [Feature Name]
-
-## What It Does
-[Extracted from code analysis]
-
-## Implementation Notes
-[Key files, patterns, dependencies]
-```
-
-Update lookup table with 8+ keywords per spec.
-
----
-
-## MODE: Investigate (Diagnose Issues)
-
-### Interview (max 4 exchanges)
-
-1. **Symptom:** "What's happening?" (error, wrong behavior, performance)
-2. **Reproduction:** "Steps to reproduce? Or intermittent?"
-3. **Suspected area:** "Any idea where it might be?" (or "no clue")
-4. **Recent changes:** "Did this work before? What changed?"
-
-### Analysis
-
-- Search codebase for suspected areas
-- Check logs, error patterns
-- Trace data flow
-
-**Output findings, do not fix.** Investigation identifies; resolution fixes.
-
-### Generate Files
-
-**Investigation report** (`specs/[issue]-investigation.md`):
-```markdown
-# Investigation: [Issue Name]
-
-## Symptom
-[What was observed]
-
-## Findings
-- Root cause: [or "suspected: X"]
-- Affected files: `[file]:[lines]`, `[file]:[lines]`
-- Evidence: [what pointed to this]
-
-## Recommended Fix
-[Approach, not implementation]
-```
-
----
-
-## MODE: Resolve (Fix Known Issues)
-
-### Input
-
-Requires investigation output. If none exists:
-- "No investigation found. Run investigate mode first, or describe the issue."
-
-### Interview (max 2 exchanges)
-
-1. **Confirm scope:** "Fixing [issue] by [approach from investigation]—correct?"
-2. **Constraints:** "Any constraints? (backwards compat, timeline)"
-
-### Generate Files
-
-**Plan** (`specs/[issue]-resolution-plan.md`):
-```markdown
-# Resolution: [Issue] Implementation Plan
-
-- [ ] `[file]:[lines]`: [specific fix]
-- [ ] `[file]:[lines]`: [specific fix]
-- [ ] `[test-file]`: [regression test]
-```
-
----
-
-## Step 3: Create prompt.md
-
-Create in **project root** (not specs/).
-
-**Placeholder substitution:**
-
-| Placeholder | Description | Example |
-|-------------|-------------|---------|
-| `[name]` | Base name for this work | `auth-feature`, `bug-fixes` |
-| `[test command]` | From specs/readme.md | `pnpm test`, `swift test` |
-| `[prefix]` | Commit prefix: Forward=`feat`, Investigate/Resolve=`fix`, Reverse=`docs` | `feat`, `fix` |
-
-**Auto-migration (if prompt.md exists):**
-If refreshing and plan contains verbose markers (`### Problem`, `### Root Cause`, `**Why This Fix`, `## Sources Consulted`):
-1. Extract section headers and checklist items
-2. Preserve `## Discovered Issues` section
-3. Discard verbose content
-4. Write lean plan
-5. Output: "Migrated plan to lean format ✓"
-
-**Template:**
+## Step 4: Create prompt.md
 
 ```markdown
 <!-- loop-setup:active -->
 Study specs/readme.md.
-Study specs/[name]-implementation-plan.md.
+Study specs/[name]-plan.md.
 
-Pick the most important unchecked item. Build it.
+Pick the most important unchecked item. Implement it.
 
-Important:
-- Use existing patterns (search first)
-- Build tests (property-based or unit)
-
-After implementing:
-1. Run code-simplifier agent on modified files
-2. Run loop-setup:validate skill
-3. Fix blocking issues, append discovered issues to plan
-4. Run [test command] - fix failures from your changes
-5. Update specs/*.md if behavior changed
-6. Mark `[x]` in plan, commit with "[prefix]: [description]"
-7. Output `<promise>COMMITTED</promise>` and EXIT
+After: Mark [x] in plan. Commit. EXIT.
 ```
 
-**CHECKPOINT:** Read back prompt.md, verify correct plan reference.
+## Step 5: Summary
 
----
-
-## Step 4: Ensure CLAUDE.md Has Specs Integration
-
-**If CLAUDE.md doesn't exist:**
-
-Create with full template:
-
-```markdown
-# [Project Name]
-
-## Commands
-- Run tests: `[test command]`
-
-## Rules
-
-- **Workflow continuity**: After any tool completes, proceed to next workflow step. Tool completion is NOT a pause point.
-- **Test failures**: Only fix tests that fail due to YOUR changes. Pre-existing failures are DISCOVERED issues—append to plan.
-
-## Specs Workflow
-- **Before implementing:** Search `specs/readme.md` keyword table for patterns
-- **Before modifying a feature:** Check if `specs/[feature].md` exists
-- **After implementation changes behavior:** Update relevant spec in specs/
+Output files created, next steps:
+```
+cat prompt.md | claude --dangerously-skip-permissions
 ```
 
-Output: "Created CLAUDE.md ✓"
-
-**If CLAUDE.md exists:**
-
-1. Read it
-2. Check for Rules section (`## Rules`)
-3. Check for Specs section (`specs/readme` or `## Specs`)
-4. Append missing sections
-
-Output: "CLAUDE.md already configured ✓" or "Added [section] to CLAUDE.md ✓"
-
-**CHECKPOINT:** Read CLAUDE.md, verify both sections exist.
-
----
-
-## Step 5: Output Summary
-
-```
-Loop setup complete ([mode] mode)
-
-Files:
-- specs/[name].md ✓ (spec)
-- specs/[name]-implementation-plan.md ✓ (plan)
-- specs/readme.md (updated) ✓
-- prompt.md ✓
-- CLAUDE.md ✓
-
-Workflow per task:
-  implement → simplify (wait) → validate → test → commit
-       ↑                                      │
-       └────────── fix if tests fail ─────────┘
-
-Next:
-1. Review files - "I generate them, then review and edit by hand"
-2. NEW ARRAY (new terminal) - "Create a new array"
-3. Run ATTENDED first:
-   cat prompt.md | claude --dangerously-skip-permissions
-4. When stable:
-   while true; do cat prompt.md | claude --dangerously-skip-permissions; done
-```
-
-**STOP. Do not implement.**
+STOP. Do not implement.

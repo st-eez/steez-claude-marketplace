@@ -214,6 +214,7 @@ Read specs/readme.md for context lookup. One goal per context window.
 Cite file:line when referencing code.
 
 Before implementing: Search specs keywords for existing patterns.
+Stay focused: Only fix issues caused by your changes. Discovered issues → append to plan, continue.
 After changes: Run tests. Update specs if behavior changed.
 ```
 

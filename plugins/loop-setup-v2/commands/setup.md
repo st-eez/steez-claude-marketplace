@@ -59,7 +59,23 @@ Wait for user confirmation before creating files.
 
 Store confirmed patterns for prompt.md Important section.
 
-Create `specs/[name].md` (spec) with clear sections documenting the feature.
+Create `specs/[name].md` using this template:
+```markdown
+# [Name]
+**Stack**: [relevant stack subset] | **Tests**: [test command if different from root]
+
+## What It Does
+[Core behavior in 2-3 sentences]
+
+## Constraints
+- [Technical constraints]
+- [Business rules]
+- [Performance requirements]
+
+## Key Files
+- `src/file.ts:42-58`: [what this code handles]
+- `src/other.ts:15`: [what this code handles]
+```
 
 Create `specs/[name]-plan.md` using this format:
 ```markdown
@@ -99,7 +115,23 @@ Wait for user confirmation before exploring sources.
 3. **For each selected item**:
    - Synthesize understanding from all sources
    - Interview briefly: "So [feature] does X—correct? Any constraints?"
-   - Create `specs/[name].md` documenting current behavior
+   - Create `specs/[name].md` using this template:
+     ```markdown
+     # [Name]
+     **Stack**: [relevant stack subset] | **Tests**: [test command if different from root]
+
+     ## What It Does
+     [Core behavior in 2-3 sentences]
+
+     ## Constraints
+     - [Technical constraints]
+     - [Business rules]
+     - [Performance requirements]
+
+     ## Key Files
+     - `src/file.ts:42-58`: [what this code handles]
+     - `src/other.ts:15`: [what this code handles]
+     ```
    - Update lookup table with 8+ keywords
 
 4. **Optional plan**: If user wants improvements/tests, create `specs/[name]-plan.md` using the standard plan format:

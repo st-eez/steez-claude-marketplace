@@ -30,6 +30,13 @@ STRUCTURE=(
     "## Step 5: Summary"
 )
 
+# Required spec template sections (must appear in both Forward and Reverse modes)
+SPEC_TEMPLATE=(
+    "## What It Does"
+    "## Constraints"
+    "## Key Files"
+)
+
 errors=0
 
 echo "Validating setup.md structure..."
@@ -60,6 +67,19 @@ for element in "${STRUCTURE[@]}"; do
         echo "✓ Found: $element"
     else
         echo "✗ MISSING: $element"
+        ((errors++))
+    fi
+done
+
+# Validate spec template sections appear at least twice (Forward + Reverse modes)
+echo ""
+echo "Checking spec template sections..."
+for section in "${SPEC_TEMPLATE[@]}"; do
+    count=$(grep -cF "$section" "$SETUP_FILE" || true)
+    if [[ $count -ge 2 ]]; then
+        echo "✓ Found $count occurrences: $section"
+    else
+        echo "✗ MISSING or insufficient: $section (found $count, need 2+)"
         ((errors++))
     fi
 done

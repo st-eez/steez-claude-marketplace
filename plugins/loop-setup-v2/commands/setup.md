@@ -2,7 +2,7 @@
 description: Scaffold Ralph Loop files (specs, prompt.md, plan)
 arguments:
   - name: mode
-    description: "forward (build from scratch), reverse (extract from existing)"
+    description: "forward (build), reverse (extract), investigate (identify), resolve (fix)"
     required: false
 user_invocable: true
 ---
@@ -27,7 +27,7 @@ Create `specs/readme.md`:
 
 ## Step 2: Determine Mode
 
-{{#if mode}}Mode: {{mode}}{{else}}Ask: "Forward (new build) or Reverse (extract from existing)?"{{/if}}
+{{#if mode}}Mode: {{mode}}{{else}}Ask: "Which mode? Forward (build), Reverse (extract), Investigate (identify), or Resolve (fix)?"{{/if}}
 
 ---
 
@@ -58,6 +58,65 @@ Update lookup table with 8+ keywords.
    - Update lookup table with 8+ keywords
 
 4. **Optional plan**: If user wants improvements/tests, create `specs/[name]-plan.md`.
+
+---
+
+### Investigate Mode
+
+**Purpose**: Identify root cause of bugs/issues. Produces findings for resolution loop.
+
+1. Ask: "What's the issue/symptom to investigate?"
+
+2. **Explore**: Launch Explore agent to identify affected code:
+   > "Find code related to [symptom]. Return: files, functions, data flow."
+
+3. **Document findings**: Create `specs/investigate-[issue].md`:
+```markdown
+# Investigation: [Issue]
+**Symptom**: [description]
+**Affected files**: [file:line citations]
+**Root cause**: [hypothesis]
+**Resolution**: [recommended fix approach]
+```
+
+4. Update lookup table with keywords: issue, bug, investigate, [symptom terms].
+
+5. **Create prompt.md** for resolution:
+```markdown
+<!-- loop-setup:active -->
+Study specs/readme.md.
+Study specs/investigate-[issue].md.
+
+Implement the recommended resolution. Verify fix works.
+
+After: Delete investigate file. Commit. EXIT.
+```
+
+---
+
+### Resolve Mode
+
+**Purpose**: Fix issues from investigation findings.
+
+1. **Check for investigation**: Read `specs/investigate-*.md`. If none found:
+   - Ask: "Which investigation file, or describe the issue to resolve?"
+   - If user describes issue directly, create brief `specs/investigate-[issue].md` first.
+
+2. **Create resolution plan**: Create `specs/resolve-[issue]-plan.md` with:
+   - Checklist of fixes with `file:line` citations
+   - Verification steps (tests, manual checks)
+
+3. **Create prompt.md**:
+```markdown
+<!-- loop-setup:active -->
+Study specs/readme.md.
+Study specs/investigate-[issue].md.
+Study specs/resolve-[issue]-plan.md.
+
+Pick the most important unchecked fix. Implement it.
+
+After: Mark [x] in plan. Commit. EXIT.
+```
 
 ---
 

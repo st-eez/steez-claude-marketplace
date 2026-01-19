@@ -163,6 +163,11 @@ After: Mark [x] in plan. Commit. EXIT.
    - Understand the concern
    - What sources should I look at? (external style guides, best practices URLs, library docs, codebase patterns)
 
+**Confirm understanding**: Present summary:
+> "Addressing [concern] using [sources]. READY? Reply 'go' to proceed."
+
+Wait for user confirmation before exploring sources.
+
 3. **Explore**: Launch Explore agent for affected files based on described concern:
    > "Find code related to [concern]. Return: files, patterns, opportunities."
 

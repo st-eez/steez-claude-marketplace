@@ -141,7 +141,7 @@ After: Mark [x] in plan. Commit. EXIT.
 
 2. **Interview** (max 3 exchanges):
    - Understand the concern
-   - Ask: "What sources? External guides, best practices docs, codebase patterns?"
+   - What sources should I look at? (external style guides, best practices URLs, library docs, codebase patterns)
 
 3. **Explore**: Launch Explore agent for affected files based on described concern:
    > "Find code related to [concern]. Return: files, patterns, opportunities."

@@ -108,6 +108,9 @@ After: Delete investigate file. Commit. EXIT.
 
 **Purpose**: Fix issues from investigation findings.
 
+Interview (max 3 exchanges, "I don't care" = complete):
+- What sources should I look at? (library docs, similar fixes, StackOverflow, related PRs, codebase patterns)
+
 1. **Check for investigation**: Read `specs/investigate-*.md`. If none found:
    - Ask: "Which investigation file, or describe the issue to resolve?"
    - If user describes issue directly, create brief `specs/investigate-[issue].md` first.

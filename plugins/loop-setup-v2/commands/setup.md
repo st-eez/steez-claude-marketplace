@@ -21,8 +21,9 @@ Create `specs/readme.md`:
 **Stack**: [stack] | **Tests**: [command]
 
 ## Lookup Table
-| Spec | File | Keywords |
-|------|------|----------|
+| Spec | File | Keywords (8+ for cache hits) |
+|------|------|------------------------------|
+| [name] | specs/[name].md | term1, term2, term3, term4, term5, term6, term7, term8 |
 ```
 
 ## Step 2: Determine Mode

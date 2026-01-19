@@ -35,6 +35,7 @@ Create `specs/readme.md`:
 
 Interview (max 5 exchanges, "I don't care" = complete):
 - What are you building?
+- What sources should I look at? (design docs, API specs, URLs, code patterns, feature requests)
 - Constraints/preferences?
 
 Create `specs/[name].md` (spec) and `specs/[name]-plan.md` (checklist with `file:lines` citations).

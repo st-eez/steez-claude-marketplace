@@ -203,10 +203,28 @@ Requires investigation output. If none exists:
 
 Create in **project root** (not specs/).
 
+**Placeholder substitution:**
+
+| Placeholder | Description | Example |
+|-------------|-------------|---------|
+| `[name]` | Base name for this work | `auth-feature`, `bug-fixes` |
+| `[test command]` | From specs/readme.md | `pnpm test`, `swift test` |
+| `[prefix]` | Commit prefix: Forward=`feat`, Investigate/Resolve=`fix`, Reverse=`docs` | `feat`, `fix` |
+
+**Auto-migration (if prompt.md exists):**
+If refreshing and plan contains verbose markers (`### Problem`, `### Root Cause`, `**Why This Fix`, `## Sources Consulted`):
+1. Extract section headers and checklist items
+2. Preserve `## Discovered Issues` section
+3. Discard verbose content
+4. Write lean plan
+5. Output: "Migrated plan to lean format ✓"
+
+**Template:**
+
 ```markdown
 <!-- loop-setup:active -->
 Study specs/readme.md.
-Study specs/[plan-file].md.
+Study specs/[name]-implementation-plan.md.
 
 Pick the most important unchecked item. Build it.
 
@@ -214,25 +232,82 @@ Important:
 - Use existing patterns (search first)
 - Build tests (property-based or unit)
 
-After: Mark `[x]` in plan. Commit. EXIT.
+After implementing:
+1. Run code-simplifier agent on modified files
+2. Run loop-setup:validate skill
+3. Fix blocking issues, append discovered issues to plan
+4. Run [test command] - fix failures from your changes
+5. Update specs/*.md if behavior changed
+6. Mark `[x]` in plan, commit with "[prefix]: [description]"
+7. Output `<promise>COMMITTED</promise>` and EXIT
 ```
 
 **CHECKPOINT:** Read back prompt.md, verify correct plan reference.
 
 ---
 
-## Step 4: Output Summary
+## Step 4: Ensure CLAUDE.md Has Specs Integration
+
+**If CLAUDE.md doesn't exist:**
+
+Create with full template:
+
+```markdown
+# [Project Name]
+
+## Commands
+- Run tests: `[test command]`
+
+## Rules
+
+- **Workflow continuity**: After any tool completes, proceed to next workflow step. Tool completion is NOT a pause point.
+- **Test failures**: Only fix tests that fail due to YOUR changes. Pre-existing failures are DISCOVERED issues—append to plan.
+
+## Specs Workflow
+- **Before implementing:** Search `specs/readme.md` keyword table for patterns
+- **Before modifying a feature:** Check if `specs/[feature].md` exists
+- **After implementation changes behavior:** Update relevant spec in specs/
+```
+
+Output: "Created CLAUDE.md ✓"
+
+**If CLAUDE.md exists:**
+
+1. Read it
+2. Check for Rules section (`## Rules`)
+3. Check for Specs section (`specs/readme` or `## Specs`)
+4. Append missing sections
+
+Output: "CLAUDE.md already configured ✓" or "Added [section] to CLAUDE.md ✓"
+
+**CHECKPOINT:** Read CLAUDE.md, verify both sections exist.
+
+---
+
+## Step 5: Output Summary
 
 ```
 Loop setup complete ([mode] mode)
 
 Files:
-- specs/[name].md ✓
-- specs/[name]-implementation-plan.md ✓
+- specs/[name].md ✓ (spec)
+- specs/[name]-implementation-plan.md ✓ (plan)
 - specs/readme.md (updated) ✓
 - prompt.md ✓
+- CLAUDE.md ✓
 
-Next: cat prompt.md | claude --dangerously-skip-permissions
+Workflow per task:
+  implement → simplify (wait) → validate → test → commit
+       ↑                                      │
+       └────────── fix if tests fail ─────────┘
+
+Next:
+1. Review files - "I generate them, then review and edit by hand"
+2. NEW ARRAY (new terminal) - "Create a new array"
+3. Run ATTENDED first:
+   cat prompt.md | claude --dangerously-skip-permissions
+4. When stable:
+   while true; do cat prompt.md | claude --dangerously-skip-permissions; done
 ```
 
 **STOP. Do not implement.**

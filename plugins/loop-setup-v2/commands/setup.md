@@ -223,9 +223,17 @@ After: Run [test command]. Mark [x] in plan. Commit. Exit.
 
 ## Step 5: Summary
 
-Output files created. Next:
+List all files created during this setup:
+- `specs/readme.md` (if created new)
+- `specs/[name].md` (spec file)
+- `specs/[name]-plan.md` (plan file, if applicable)
+- `prompt.md`
+- `.claude/CLAUDE.md` (if created new)
+
+Output format:
 ```
-cat prompt.md | claude --dangerously-skip-permissions
+✓ Created: specs/readme.md, specs/[name].md, specs/[name]-plan.md, prompt.md
+Next: cat prompt.md | claude --dangerously-skip-permissions
 ```
 
 STOP here. Scaffolding complete.

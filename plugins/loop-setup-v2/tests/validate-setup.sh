@@ -42,6 +42,13 @@ MODE_GUIDANCE=(
     "Reverse mode documents existing code.*Forward mode"
 )
 
+# Keywords example pattern (must show synonyms/related terms for cache hits)
+# Example format: authentication, login, logout, session, jwt, token, oauth, signin, signup
+KEYWORDS_EXAMPLE=(
+    "Example.*synonyms.*related terms.*cache hits"
+    "Auth.*specs/auth.md.*authentication.*login.*logout.*session.*jwt.*token"
+)
+
 errors=0
 
 echo "Validating setup.md structure..."
@@ -93,6 +100,18 @@ done
 echo ""
 echo "Checking mode guidance..."
 for pattern in "${MODE_GUIDANCE[@]}"; do
+    if grep -qE "$pattern" "$SETUP_FILE"; then
+        echo "✓ Found: $pattern"
+    else
+        echo "✗ MISSING: $pattern"
+        ((errors++))
+    fi
+done
+
+# Validate keywords example (synonyms/related terms for cache hits)
+echo ""
+echo "Checking keywords example..."
+for pattern in "${KEYWORDS_EXAMPLE[@]}"; do
     if grep -qE "$pattern" "$SETUP_FILE"; then
         echo "✓ Found: $pattern"
     else

@@ -29,6 +29,9 @@ Create `specs/readme.md`:
 | Spec | File | Keywords (8+ for cache hits) |
 |------|------|------------------------------|
 | [name] | specs/[name].md | term1, term2, term3, term4, term5, term6, term7, term8 |
+
+<!-- Example: Use synonyms and related terms for cache hits -->
+<!-- | Auth | specs/auth.md | authentication, login, logout, session, jwt, token, oauth, signin, signup | -->
 ```
 
 **Checkpoint**: Read back `specs/readme.md`. If content matches intent, output "✓ PIN created". If missing or malformed, retry creation.

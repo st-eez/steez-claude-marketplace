@@ -45,15 +45,20 @@ Update lookup table with 8+ keywords.
 
 ### Reverse Mode
 
-**Purpose**: Extract specs from existing code/features.
+**Purpose**: Extract specs from existing code/features/documentation.
 
-1. **Explore**: Launch Explore agent to identify existing features/modules:
-   > "Identify main features in this codebase. Return: name, description, key files."
+Interview (max 5 exchanges, "I don't care" = complete):
+- What do you want to document?
+- What sources should I look at? (codebase paths, URLs, PDFs, user guides, marketing materials, documentation)
 
-2. **Present findings**: List discovered features, ask which to document.
+1. **Explore sources**: For each source type:
+   - Codebase paths: Launch Explore agent to identify features/modules
+   - URLs/PDFs/docs: Read and extract key behaviors, constraints, patterns
 
-3. **For each selected feature**:
-   - Read key files to understand behavior
+2. **Present findings**: List discovered features/behaviors, ask which to document.
+
+3. **For each selected item**:
+   - Synthesize understanding from all sources
    - Interview briefly: "So [feature] does X—correct? Any constraints?"
    - Create `specs/[name].md` documenting current behavior
    - Update lookup table with 8+ keywords

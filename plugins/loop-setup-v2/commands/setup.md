@@ -130,6 +130,11 @@ Interview (max 3 exchanges, "I don't care" = complete):
    - Ask: "Which investigation file, or describe the issue to resolve?"
    - If user describes issue directly, create brief `specs/investigate-[issue].md` first.
 
+**Confirm understanding**: Present summary:
+> "Resolving [issue] using [sources]. Investigation: [findings summary]. READY? Reply 'go' to proceed."
+
+Wait for user confirmation before creating plan.
+
 2. **Create resolution plan**: Create `specs/resolve-[issue]-plan.md` with:
    - Checklist of fixes with `file:line` citations
    - Verification steps (tests, manual checks)

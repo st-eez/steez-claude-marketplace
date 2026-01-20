@@ -11,6 +11,39 @@ user_invocable: true
 
 Scaffold files for Ralph Loop. This command creates files only.
 
+## Plan Format Rules (ALL MODES)
+
+Plans are flat checklists. The loop picks ONE item per iteration.
+
+**Required structure:**
+```markdown
+# [Name] Plan
+
+## Checklist
+- [ ] `file:lines`: [change] | refs: specs/[name].md
+- [ ] `file:lines`: [change] | refs: specs/[name].md
+```
+
+**Forbidden in plans:**
+- Phase headers (`### Phase 1`, `## Phase 2`)
+- Section groupings (`## Setup`, `## Configuration`, `## Verification`)
+- Nested task groups
+- Any structure that implies "complete this group together"
+
+Each checklist item is independent. Order by priority if natural order exists, otherwise list as discovered. The loop handles one item, commits, exits, repeats.
+
+## prompt.md Rules (ALL MODES)
+
+prompt.md has exactly 2 study lines—no more:
+1. `Study specs/readme.md` (the PIN/lookup table)
+2. `Study specs/[name]-plan.md` (the plan for this work)
+
+**Never add additional study lines.** Specs are accessed via:
+- The PIN's keyword lookup table (triggers search tool when needed)
+- The plan's `refs:` links (strong linkage to relevant specs)
+
+Adding `Study specs/[name].md` wastes tokens every loop iteration. The lookup table pattern exists precisely to avoid this.
+
 ## Step 1: Check PIN
 
 Read `specs/readme.md`. If it exists, proceed to Step 2.
@@ -90,13 +123,14 @@ Create `specs/[name].md` using this template:
 ```
 
 <!-- Strong linkage: file:line lets the loop find exact code. refs: links to spec for context. -->
-Create `specs/[name]-plan.md` using this format:
+Create `specs/[name]-plan.md` (see Plan Format Rules—flat checklist only):
 ```markdown
 # [Name] Plan
 
 ## Checklist
 - [ ] `src/file.ts:42-58`: [change description] | refs: specs/[name].md
 - [ ] `src/other.ts:15`: [change description] | refs: specs/[name].md
+- [ ] `tests/[name].test.ts`: add tests for [feature] | refs: specs/[name].md
 ```
 
 Update lookup table with 8+ keywords.
@@ -127,11 +161,12 @@ If any target files exist (`specs/reverse-[target]-plan.md`, `prompt.md`), ask:
   Overwrite with proper structure, carrying forward what the user was trying to accomplish.
 - **No**: Skip existing files, only create missing ones
 
-1. **Create extraction plan** `specs/reverse-[target]-plan.md`:
+1. **Create extraction plan** `specs/reverse-[target]-plan.md` (see Plan Format Rules—flat checklist only):
 ```markdown
 # Reverse [Target] Plan
 
 ## Checklist
+- [ ] Extract from `[source]`: [what to document] | type: [codebase/URL/PDF]
 - [ ] Extract from `[source]`: [what to document] | type: [codebase/URL/PDF]
 ```
 
@@ -191,11 +226,12 @@ If any target files exist (`specs/investigate-[issue].md`, `specs/investigate-[i
 **Recommended resolution**: TBD
 ```
 
-2. **Create investigation plan** `specs/investigate-[issue]-plan.md`:
+2. **Create investigation plan** `specs/investigate-[issue]-plan.md` (see Plan Format Rules—flat checklist only):
 ```markdown
 # Investigate [Issue] Plan
 
 ## Checklist
+- [ ] Check `[source]`: [what to look for] | refs: specs/investigate-[issue].md
 - [ ] Check `[source]`: [what to look for] | refs: specs/investigate-[issue].md
 ```
 
@@ -245,15 +281,13 @@ If any target files exist (`specs/resolve-[issue]-plan.md`, `prompt.md`), ask:
   Overwrite with proper structure, carrying forward what the user was trying to accomplish.
 - **No**: Skip existing files, only create missing ones
 
-2. **Create resolution plan**: Create `specs/resolve-[issue]-plan.md`:
+2. **Create resolution plan** `specs/resolve-[issue]-plan.md` (see Plan Format Rules—flat checklist only):
 ```markdown
 # Resolve [Issue] Plan
 
 ## Checklist
 - [ ] `file:lines`: [fix description] | refs: specs/investigate-[issue].md
-
-## Verification
-- [ ] [test or manual check]
+- [ ] `tests/[file].test.ts`: add regression test for [issue] | refs: specs/investigate-[issue].md
 ```
 
 3. **Create prompt.md**:
@@ -306,11 +340,12 @@ If any target files exist (`specs/[concern]-patterns.md`, `specs/[concern]-plan.
 **Rules**: [specific patterns to apply]
 ```
 
-5. **Create plan** `specs/[concern]-plan.md`:
+5. **Create plan** `specs/[concern]-plan.md` (see Plan Format Rules—flat checklist only):
 ```markdown
 # [Concern] Plan
 
 ## Checklist
+- [ ] `file:lines`: [pattern to apply] | refs: specs/[concern]-patterns.md
 - [ ] `file:lines`: [pattern to apply] | refs: specs/[concern]-patterns.md
 ```
 
@@ -354,6 +389,7 @@ Configure test runner to only output failing tests (minimizes context usage).
 
 **Forward mode only.** Other modes create their own prompt.md in Step 2. If not Forward mode, skip to Step 5.
 
+Create `prompt.md` (see prompt.md Rules—exactly 2 study lines):
 ```markdown
 <!-- loop-setup:active -->
 Study specs/readme.md.
